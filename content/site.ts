@@ -36,7 +36,7 @@ export const site = {
     "Marabu Constructions (A Unit of Marabu Groups), Salem — constructions, planning & consulting, interior designing, infrastructure fabrication and villas across Tamil Nadu.",
 
   contact: {
-    phone: { display: "+91 90804 55007", href: "tel:+919080455007" },
+    phone: { display: "+91 90804 55007", href: "tel:+919080455007", person: "Er. Arul Selvan R" },
     whatsapp: {
       href: `https://wa.me/${whatsappNumber}`,
       withMessage: `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`,

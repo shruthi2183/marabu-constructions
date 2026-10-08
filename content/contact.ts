@@ -26,7 +26,7 @@ export const contact = {
       ringing: "…it's ringing — RING RING!! ☎",
       details: "go on — pick up ✎",
     },
-    note: `☎ ${site.contact.phone.display} — we're listening`,
+    note: `☎ ${site.contact.phone.person} · ${site.contact.phone.display} — we're listening`,
   },
 
   reach: {

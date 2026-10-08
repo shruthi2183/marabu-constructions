@@ -94,6 +94,7 @@ export function ContactGrid() {
         <div className="grid gap-12 min-[901px]:grid-cols-[0.92fr_1.08fr]">
           <div {...reveal()}>
             <Tile icon="phone" label={reach.tiles.phone.label}>
+              <span className="block font-display text-[1.2rem] text-ink">{phone.person}</span>
               <a href={phone.href} className="-my-[13px] inline-block py-[13px] font-semibold transition-colors hover:text-gold-deep">
                 {phone.display}
               </a>
