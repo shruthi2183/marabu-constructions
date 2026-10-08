@@ -1,26 +1,397 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * Marabu Constructions design system.
+ * Values follow the approved HTML reference (reference/marabu-html/).
+ * Defined with @theme so Tailwind generates matching utilities
+ * (bg-cream, text-ink, border-line, font-display, max-w-content, py-section…).
+ */
+@theme {
+  /* Palette */
+  --color-cream: #f7f1e3; /* Page background; matches the logo background */
+  --color-ivory: #fbf8ef;
+  --color-champagne: #f1e9d6;
+  --color-paper: #fffdf6; /* Form fields */
+  --color-gold: #c9a24b; /* Decorative: rules, ticks, dots. Not for small text */
+  --color-gold-deep: #8a5a10; /* Gold text and links (~5.3:1 on cream) */
+  --color-silver: #aeb4bc;
+  --color-ink: #262b31; /* Text and headings */
+  --color-ink-muted: #5b636c; /* Secondary text (~5.4:1 on cream) */
+  --color-line: rgb(38 43 49 / 0.15); /* Hairline borders */
+  --color-focus: var(--color-gold-deep);
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Type scale */
+  --text-display-1: clamp(2.5rem, 5vw, 3.9rem);
+  --text-display-2: clamp(1.9rem, 3.4vw, 2.8rem);
+  --text-lede: 1.05rem;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Layout */
+  --container-content: 80rem;
+  --container-reading: 42rem;
+  --spacing-gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --spacing-section: clamp(4.5rem, 9vw, 7rem);
+
+  /* Shape and motion */
+  --radius-subtle: 2px;
+  --ease-marabu: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --default-transition-duration: 250ms;
+
+  --animate-ticker: ticker 32s linear infinite;
+  --animate-ping: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-menu-in: menu-in 0.3s ease;
+  --animate-pre-in: pre-in 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-pre-bar: pre-bar 1.1s ease-in-out infinite;
+  --animate-cue: cue 1.8s ease-in-out infinite;
+
+  @keyframes ticker {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes ping {
+    75%,
+    100% {
+      transform: scale(2.4);
+      opacity: 0;
+    }
+  }
+  @keyframes menu-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes pre-in {
+    from {
+      opacity: 0;
+      transform: scale(0.94);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes pre-bar {
+    from {
+      transform: translateX(-110%);
+    }
+    to {
+      transform: translateX(300%);
+    }
+  }
+  @keyframes cue {
+    0% {
+      transform: scaleY(0);
+      transform-origin: top;
+    }
+    45% {
+      transform: scaleY(1);
+      transform-origin: top;
+    }
+    55% {
+      transform: scaleY(1);
+      transform-origin: bottom;
+    }
+    100% {
+      transform: scaleY(0);
+      transform-origin: bottom;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Contact hero phone: ringing shake and pulsing sound arcs. */
+@keyframes ring-shake {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(0.7deg);
+  }
+  75% {
+    transform: rotate(-0.7deg);
+  }
 }
+@keyframes arc-pulse {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+/* Font families come from next/font CSS variables set in app/layout.tsx */
+@theme inline {
+  --font-sans: var(--font-inter), -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-cormorant), Georgia, serif;
+  --font-hand: var(--font-caveat), cursive;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+    /* Pencil cursor (from the reference); system cursor as fallback. */
+    cursor:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'><path d='M3 23L5.5 16.5 19 3a2.5 2.5 0 0 1 3.5 3.5L9 20.5Z' fill='%23FBF8EF' stroke='%23262B31' stroke-width='1.5' stroke-linejoin='round'/><path d='M3 23l2.5-6.5 4 4Z' fill='%23C9A24B' stroke='%23262B31' stroke-width='1' stroke-linejoin='round'/><path d='M7.5 14.5l4 4M18 4l4 4' stroke='%23262B31' stroke-width='1'/></svg>")
+        3 23,
+      auto;
+  }
+
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  [role="button"] {
+    cursor:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'><path d='M3 23L5.5 16.5 19 3a2.5 2.5 0 0 1 3.5 3.5L9 20.5Z' fill='%23E9D5A0' stroke='%238A5A10' stroke-width='1.5' stroke-linejoin='round'/><path d='M3 23l2.5-6.5 4 4Z' fill='%238A5A10' stroke='%238A5A10' stroke-width='1' stroke-linejoin='round'/><path d='M7.5 14.5l4 4M18 4l4 4' stroke='%238A5A10' stroke-width='1'/></svg>")
+        3 23,
+      pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--color-ink);
+  }
+
+  ::selection {
+    background-color: var(--color-gold);
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-champagne);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--color-gold-deep), var(--color-gold));
+    border-radius: 10px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      transition-delay: 0ms !important;
+    }
+  }
+}
+
+/* Shared editorial elements from the reference */
+@layer components {
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--color-gold-deep);
+  }
+  .eyebrow::before,
+  .eyebrow-center::after {
+    content: "";
+    width: 2rem;
+    height: 1px;
+    background: var(--color-gold);
+  }
+  .eyebrow-center {
+    justify-content: center;
+  }
+
+  .lede {
+    font-size: var(--text-lede);
+    color: var(--color-ink-muted);
+  }
+
+  .hand-tag {
+    font-family: var(--font-hand);
+    font-size: 1.3rem;
+    color: var(--color-gold-deep);
+  }
+
+  .w-accent {
+    font-style: italic;
+    color: var(--color-gold-deep);
+  }
+
+  .rule {
+    display: block;
+    height: 1px;
+    background: var(--color-gold);
+  }
+}
+
+/*
+ * Homepage construction drawing (components/sections/home/ConstructionDrawing.tsx).
+ * Stroke styles from the reference #villaSvg. Annotations (.fade) fade in
+ * rather than draw; until ConstructionEngine has prepared the strokes, and
+ * with reduced motion, the finished drawing is shown.
+ */
+@layer components {
+  .construction-drawing {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .construction-drawing .st {
+    fill: none;
+    stroke: rgb(38 43 49 / 0.62);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .construction-drawing .thin {
+    fill: none;
+    stroke: rgb(38 43 49 / 0.42);
+    stroke-width: 1.3;
+    stroke-linecap: round;
+  }
+  .construction-drawing .gs {
+    fill: none;
+    stroke: rgb(138 90 16 / 0.62);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .construction-drawing .dashed {
+    stroke-dasharray: 9 7;
+  }
+  .construction-drawing .fillg {
+    fill: rgb(201 162 75 / 0.85);
+    stroke: none;
+  }
+  .construction-drawing text {
+    font-family: var(--font-hand);
+    font-size: 21px;
+    fill: rgb(138 90 16 / 0.8);
+  }
+  html[data-construction-ready] .construction-drawing .fade {
+    opacity: 0;
+  }
+}
+
+/*
+ * Reveal system (driven by components/layout/RevealController.tsx, which adds
+ * .is-in once the preloader has finished and the element scrolls into view).
+ * [data-split]  — word-by-word mask reveal (components/ui/SplitText.tsx)
+ * [data-reveal] — fade and rise
+ * [data-line]   — horizontal rule drawn from the left
+ * [data-slide]  — slide in from the left ("l") or right ("r")
+ * Without JavaScript a <noscript> rule in the layout shows everything.
+ */
+@layer components {
+  .w-mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+  }
+  .w {
+    display: inline-block;
+    transform: translateY(120%);
+    transition: transform 0.9s var(--ease-marabu);
+    will-change: transform;
+  }
+  [data-split].is-in .w {
+    transform: translateY(0);
+  }
+
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.9s var(--ease-soft),
+      transform 0.9s var(--ease-soft);
+  }
+  [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  [data-line] {
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.8s var(--ease-marabu);
+  }
+  [data-line].is-in {
+    transform: scaleX(1);
+  }
+
+  [data-slide] {
+    opacity: 0;
+    transition:
+      opacity 0.8s var(--ease-soft),
+      transform 0.95s var(--ease-marabu);
+    will-change: transform, opacity;
+  }
+  [data-slide="l"] {
+    transform: translateX(var(--slide-distance, -110px));
+  }
+  [data-slide="r"] {
+    transform: translateX(calc(var(--slide-distance, -110px) * -1));
+  }
+  [data-slide].is-in {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal],
+    [data-line],
+    [data-slide],
+    .w {
+      transition: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+}
+
