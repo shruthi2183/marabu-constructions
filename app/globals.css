@@ -316,40 +316,41 @@
     opacity: 0;
   }
 
-  /* The drawing scales down with the viewport (to ~0.27× on a phone), so
-     thicken and darken the lines on narrow screens to keep them legible. */
+  /* On narrow screens the drawing is still scaled down (to ~0.5× on a phone,
+     see fitViewBox in ConstructionEngine), so thicken and darken the lines
+     to keep them legible. */
   @media (max-width: 900px) {
     .construction-drawing .st {
       stroke: rgb(38 43 49 / 0.88);
-      stroke-width: 3.6;
+      stroke-width: 2.8;
     }
     .construction-drawing .thin {
       stroke: rgb(38 43 49 / 0.7);
-      stroke-width: 2.4;
+      stroke-width: 1.9;
     }
     .construction-drawing .gs {
       stroke: rgb(138 90 16 / 0.88);
-      stroke-width: 3.4;
+      stroke-width: 2.7;
     }
     .construction-drawing .dashed {
-      stroke-dasharray: 14 10;
+      stroke-dasharray: 12 9;
     }
   }
   @media (max-width: 600px) {
     .construction-drawing .st {
       stroke: rgb(38 43 49 / 0.95);
-      stroke-width: 5;
+      stroke-width: 3.4;
     }
     .construction-drawing .thin {
       stroke: rgb(38 43 49 / 0.78);
-      stroke-width: 3.4;
+      stroke-width: 2.3;
     }
     .construction-drawing .gs {
       stroke: rgb(138 90 16 / 0.95);
-      stroke-width: 4.6;
+      stroke-width: 3.2;
     }
     .construction-drawing .dashed {
-      stroke-dasharray: 20 14;
+      stroke-dasharray: 14 10;
     }
   }
 }

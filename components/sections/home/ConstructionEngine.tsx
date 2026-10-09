@@ -16,6 +16,12 @@ type DrawnStroke = { el: SVGGeometryElement; len: number; s0: number; t: number 
 type Stage = { strokes: DrawnStroke[]; fades: SVGElement[]; a: number; b: number; fade: number };
 
 const N = 12;
+// Drawing sheet (ConstructionDrawing viewBox) and the building's centre line
+// (grid A–F runs x 280–1280); narrow screens never crop tighter than 700.
+const VIEW_W = 1440;
+const VIEW_H = 940;
+const VIEW_CX = 780;
+const VIEW_MIN_W = 700;
 const TAU = Math.PI * 2;
 const clamp = (v: number, a = 0, b = 1) => (v < a ? a : v > b ? b : v);
 const docTop = (el: Element) => el.getBoundingClientRect().top + window.scrollY;
@@ -70,6 +76,22 @@ export default function ConstructionEngine() {
     }
     document.documentElement.dataset.constructionReady = "true";
 
+    // Frame the drawing for the screen. Wide screens show the whole sheet
+    // (1440×940); on narrower, taller screens the viewBox narrows around the
+    // building's centre so it stays large (≈70% of the viewport height) rather
+    // than shrinking to a strip. Refit only when the width changes, so mobile
+    // address-bar show/hide doesn't make the building jump mid-scroll.
+    let fittedWidth = 0;
+    const fitViewBox = () => {
+      const vw = window.innerWidth;
+      if (vw === fittedWidth) return;
+      fittedWidth = vw;
+      const scale = (window.innerHeight * 0.7) / VIEW_H;
+      const w = clamp(vw / scale, VIEW_MIN_W, VIEW_W);
+      const x = clamp(VIEW_CX - w / 2, 0, VIEW_W - w);
+      svg.setAttribute("viewBox", `${x.toFixed(1)} 0 ${w.toFixed(1)} ${VIEW_H}`);
+    };
+
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion) {
       stages.forEach((st) => {
@@ -78,7 +100,9 @@ export default function ConstructionEngine() {
       });
       [crane, bracing, scaffold, materials].forEach((g) => g && (g.style.opacity = "0"));
       pct.textContent = "SITE PROGRESS — 100%";
-      return;
+      fitViewBox();
+      window.addEventListener("resize", fitViewBox);
+      return () => window.removeEventListener("resize", fitViewBox);
     }
 
     let map: [number, number][] = [];
@@ -157,11 +181,13 @@ export default function ConstructionEngine() {
     const onResize = () => {
       window.clearTimeout(resizeTimer);
       resizeTimer = window.setTimeout(() => {
+        fitViewBox();
         computeMap();
         onScroll();
       }, 150);
     };
 
+    fitViewBox();
     computeMap();
     updateBuild(0);
     onScroll();
