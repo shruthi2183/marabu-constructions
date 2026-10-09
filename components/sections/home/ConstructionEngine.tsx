@@ -17,11 +17,13 @@ type Stage = { strokes: DrawnStroke[]; fades: SVGElement[]; a: number; b: number
 
 const N = 12;
 // Drawing sheet (ConstructionDrawing viewBox) and the building's centre line
-// (grid A–F runs x 280–1280); narrow screens never crop tighter than 700.
+// (grid A–F runs x 280–1280, footings 248–1312). Narrow screens never crop
+// tighter than 1100 so the whole building stays in view; only the outer
+// annotations are trimmed.
 const VIEW_W = 1440;
 const VIEW_H = 940;
 const VIEW_CX = 780;
-const VIEW_MIN_W = 700;
+const VIEW_MIN_W = 1100;
 const TAU = Math.PI * 2;
 const clamp = (v: number, a = 0, b = 1) => (v < a ? a : v > b ? b : v);
 const docTop = (el: Element) => el.getBoundingClientRect().top + window.scrollY;
