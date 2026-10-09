@@ -15,7 +15,7 @@ export default function HomePage() {
   return (
     <>
       {/* Fixed backdrop: graph paper and the building drawn as you scroll. */}
-      <GridBackdrop variant="home" className="max-md:opacity-45">
+      <GridBackdrop variant="home" className="max-md:opacity-85">
         <ConstructionDrawing />
       </GridBackdrop>
       <ConstructionEngine />
