@@ -3,11 +3,12 @@
 import { useEffect, useRef } from "react";
 
 // Decorative background for the contact hero: a pencil-sketch engineer
-// answering the phone (public/videos/contact-background.mp4, 1366×768,
-// ~6s loop, no audio). Nothing is downloaded until playback starts
-// (preload="none"); the poster — the clip's last frame — shows meanwhile,
-// if autoplay is blocked, and permanently with reduced motion. Playback
-// pauses while the hero is off screen.
+// (wearing his "Er. Arul Selvan R" name badge, part of the footage) answering
+// the phone — public/videos/contact-background_final.mp4, 1366×768, ~6s loop,
+// no audio. Nothing is downloaded until playback starts (preload="none");
+// the poster — the clip's last frame — shows meanwhile, if autoplay is
+// blocked, and permanently with reduced motion. Playback pauses while the
+// hero is off screen.
 //
 // Below lg the video is a full-width band under the hero copy; from lg it
 // fills the hero to the right of the copy, faded into the paper on its left
@@ -44,7 +45,7 @@ export default function ContactHeroVideo() {
         tabIndex={-1}
         className="absolute inset-0 size-full object-cover object-[60%_50%] lg:object-[45%_50%]"
       >
-        <source src="/videos/contact-background.mp4" type="video/mp4" />
+        <source src="/videos/contact-background_final.mp4" type="video/mp4" />
       </video>
       {/* Paper fades: top (into the copy / under the header) and bottom on
           every size. From lg the left edge stays near-solid paper until just
