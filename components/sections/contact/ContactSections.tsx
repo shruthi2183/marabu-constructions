@@ -8,7 +8,7 @@ import { reveal } from "@/components/ui/reveal";
 import { contact } from "@/content/contact";
 import { services } from "@/content/services";
 import { emailHref, site, whatsappHref } from "@/content/site";
-import PhoneStage from "./PhoneStage";
+import ContactHeroVideo from "./ContactHeroVideo";
 
 const tileIcons = {
   phone: (
@@ -48,12 +48,15 @@ const fieldClass =
   "w-full border border-ink/22 bg-paper px-4 py-[0.85rem] text-[0.95rem] text-ink transition-[border-color,box-shadow] duration-250 placeholder:text-ink-muted/70 focus:border-gold focus:shadow-[0_0_0_3px_rgba(168,116,32,0.13)]";
 const labelClass = "mb-2 block text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-gold-deep";
 
+// The hero copy sits on its own layer (z-10) over the background video;
+// below lg the video drops to a band under the copy (see ContactHeroVideo).
 export function ContactHero() {
-  const { eyebrow, title, description, callLabel, whatsappLabel, image, captions, note } = contact.hero;
+  const { eyebrow, title, description, callLabel, whatsappLabel } = contact.hero;
   return (
-    <section className="relative flex min-h-[92vh] items-center pt-8">
-      <Container className="grid items-center gap-16 py-section lg:grid-cols-2 lg:py-0">
-        <div className="max-w-[560px]">
+    <section className="relative flex flex-col overflow-hidden pt-8 lg:min-h-[92vh] lg:flex-row lg:items-center">
+      <ContactHeroVideo />
+      <Container className="relative z-10 order-1 pt-section pb-6 lg:py-0">
+        <div className="max-w-[560px] lg:max-w-[480px] xl:max-w-[560px]">
           <p className="eyebrow mb-4" {...reveal()}>
             <span aria-hidden="true" className="relative inline-flex size-2 flex-none">
               <span className="absolute inset-0 animate-ping rounded-full bg-gold opacity-60" />
@@ -72,9 +75,6 @@ export function ContactHero() {
               {whatsappLabel}
             </Button>
           </div>
-        </div>
-        <div {...reveal(350)}>
-          <PhoneStage image={image} captions={captions} note={note} />
         </div>
       </Container>
     </section>
