@@ -395,3 +395,93 @@
   }
 }
 
+
+/*
+ * Flyover sketch — projects page backdrop (components/sections/projects/
+ * FlyoverBackdrop.tsx). Each layer is revealed by a tall linear mask that
+ * slides from the bottom of the screen to the top, with a soft leading edge
+ * like a pencil working forward. The outlines go down first, the shading
+ * follows, then the outlines fade back so the finished tone is the drawing's.
+ */
+@layer components {
+  .flyover {
+    position: absolute;
+    inset: 0;
+    opacity: 0.46;
+    mask-image: radial-gradient(ellipse 85% 75% at 50% 55%, black 35%, transparent 85%);
+  }
+  /* Paper wash behind the centred hero copy so it stays readable. */
+  .flyover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse 42% 30% at 50% 50%,
+      var(--color-cream) 30%,
+      rgb(from var(--color-cream) r g b / 0.55) 65%,
+      transparent 100%
+    );
+  }
+  .flyover-layer {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: 50% 62%;
+    background-repeat: no-repeat;
+    mask-image: linear-gradient(to top, black 45%, transparent 55%);
+    mask-size: 100% 250%;
+    mask-repeat: no-repeat;
+    mask-position: 0% 100%;
+  }
+  .flyover-lines {
+    background-image: url("/images/projects/flyover-lines.webp");
+    opacity: 0;
+  }
+  .flyover-sketch {
+    background-image: url("/images/projects/flyover-sketch.webp");
+  }
+
+  html[data-ready] .flyover {
+    animation: flyover-settle 7s var(--ease-soft) both;
+  }
+  html[data-ready] .flyover-lines {
+    animation:
+      flyover-draw 3.2s cubic-bezier(0.45, 0.05, 0.35, 1) 0.3s both,
+      flyover-lines-out 1.4s ease 5.4s both;
+  }
+  html[data-ready] .flyover-sketch {
+    animation: flyover-draw 3.6s cubic-bezier(0.45, 0.05, 0.35, 1) 2.3s both;
+  }
+
+  @keyframes flyover-draw {
+    from {
+      mask-position: 0% 0%;
+    }
+    to {
+      mask-position: 0% 100%;
+    }
+  }
+  @keyframes flyover-lines-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes flyover-settle {
+    from {
+      transform: scale(1.04);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html[data-ready] .flyover,
+    html[data-ready] .flyover-layer {
+      animation: none;
+    }
+  }
+}

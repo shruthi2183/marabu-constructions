@@ -7,7 +7,8 @@ import { home } from "@/content/home";
 
 // The twelve-stage narrative scrolled over the fixed construction drawing.
 // Each stage is a spacer section; ConstructionEngine maps their centres to
-// drawing progress. Cards alternate sides and slide in from their own side.
+// drawing progress. Cards alternate sides, slide in from their own side and
+// fade back out once they scroll past (data-repeat), inset from the edges.
 export default function BuildFlow() {
   const { finale } = home;
 
@@ -25,10 +26,13 @@ export default function BuildFlow() {
             data-build-stage=""
             className={`relative flex min-h-[48vh] items-center justify-center md:min-h-[55vh] ${right ? "md:justify-end" : "md:justify-start"}`}
           >
-            <Container className={`flex ${right ? "md:justify-end" : ""}`}>
+            <Container
+              className={`flex md:px-[clamp(3.5rem,8vw,7rem)] ${right ? "md:justify-end" : ""}`}
+            >
               <div
                 data-sketch-hover=""
                 className={`w-full border border-line bg-[rgb(251_248_239/0.92)] px-6 py-[1.35rem] shadow-[0_12px_34px_rgba(38,43,49,0.10)] backdrop-blur-[6px] md:max-w-[380px] ${right ? "border-r-[3px] border-r-gold" : "border-l-[3px] border-l-gold"}`}
+                data-repeat=""
                 {...slide(right ? "r" : "l")}
               >
                 <p className="font-display text-[0.78rem] uppercase tracking-[0.28em] text-gold-deep">

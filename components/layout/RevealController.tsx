@@ -5,7 +5,9 @@ import { useEffect } from "react";
 // Starts the reference's entrance animations once the preloader has lifted:
 // adds .is-in to [data-reveal] / [data-line] / [data-split] / [data-slide]
 // elements as they scroll into view, and counts [data-count] numbers up from
-// zero. A MutationObserver picks up content from client-side navigations.
+// zero. Elements also marked [data-repeat] fade back out when they leave the
+// middle band of the viewport and in again on return, in both directions.
+// A MutationObserver picks up content from client-side navigations.
 // With reduced motion everything is shown immediately at its final value.
 const TARGETS = "[data-reveal],[data-line],[data-split],[data-slide]";
 
@@ -15,6 +17,7 @@ export default function RevealController() {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const seen = new WeakSet<Element>();
     let reveals: IntersectionObserver | null = null;
+    let repeats: IntersectionObserver | null = null;
     let counters: IntersectionObserver | null = null;
     let mutations: MutationObserver | null = null;
     let frame = 0;
@@ -36,6 +39,7 @@ export default function RevealController() {
         if (seen.has(el)) return;
         seen.add(el);
         if (reduceMotion) el.classList.add("is-in");
+        else if (el.hasAttribute("data-repeat")) repeats?.observe(el);
         else reveals?.observe(el);
       });
       document.querySelectorAll<HTMLElement>("[data-count]").forEach((el) => {
@@ -61,6 +65,13 @@ export default function RevealController() {
             }),
           { threshold: 0.15, rootMargin: "0px 0px -40px 0px" },
         );
+        repeats = new IntersectionObserver(
+          (entries) =>
+            entries.forEach((entry) =>
+              entry.target.classList.toggle("is-in", entry.isIntersecting),
+            ),
+          { threshold: 0.2, rootMargin: "-14% 0px -14% 0px" },
+        );
         counters = new IntersectionObserver(
           (entries) =>
             entries.forEach((entry) => {
@@ -83,6 +94,7 @@ export default function RevealController() {
       window.removeEventListener("marabu:ready", start);
       cancelAnimationFrame(frame);
       reveals?.disconnect();
+      repeats?.disconnect();
       counters?.disconnect();
       mutations?.disconnect();
     };

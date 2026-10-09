@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import CtaPanel from "@/components/sections/CtaPanel";
+import FlyoverBackdrop from "@/components/sections/projects/FlyoverBackdrop";
 import ProjectGallery from "@/components/sections/projects/ProjectGallery";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
@@ -23,7 +24,9 @@ export default function ProjectsPage() {
 
   return (
     <>
-      <GridBackdrop />
+      <GridBackdrop>
+        <FlyoverBackdrop />
+      </GridBackdrop>
 
       <section className="relative flex min-h-[78vh] items-center pt-8">
         <Container className="py-section lg:py-0">
