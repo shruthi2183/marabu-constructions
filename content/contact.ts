@@ -50,10 +50,17 @@ export const contact = {
       message: { label: "Tell Us About Your Project", placeholder: "Plot size, location, budget range, timeline…" },
     },
     submitLabel: "Request a Free Consultation",
-    // Shown instead of the reference's callback promise until a submission
-    // backend exists. Remove once the form is connected.
-    status:
-      "This form is not yet connected. Messages cannot be sent from this page at the moment — please call, WhatsApp or email us.",
+    pendingLabel: "Sending…",
+    note: "We reply to every enquiry within one working day.",
+    invalid: "Please check the highlighted fields.",
+    sent: {
+      title: "Thank you — your enquiry is with us.",
+      description: "Our engineer will call you within one working day. Want to talk sooner?",
+      whatsappLabel: "Continue on WhatsApp",
+      again: "Send another enquiry",
+    },
+    failed:
+      "Sorry — we couldn't send your enquiry just now. Please call or WhatsApp us and we'll take it from there.",
   },
 
   cta: {

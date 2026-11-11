@@ -6,8 +6,8 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import SplitText from "@/components/ui/SplitText";
 import { reveal } from "@/components/ui/reveal";
 import { contact } from "@/content/contact";
-import { services } from "@/content/services";
 import { emailHref, site, whatsappHref } from "@/content/site";
+import ContactForm from "./ContactForm";
 import ContactHeroVideo from "./ContactHeroVideo";
 
 const tileIcons = {
@@ -44,9 +44,6 @@ function Tile({ icon, label, children }: { icon: keyof typeof tileIcons; label: 
   );
 }
 
-const fieldClass =
-  "w-full border border-ink/22 bg-paper px-4 py-[0.85rem] text-[0.95rem] text-ink transition-[border-color,box-shadow] duration-250 placeholder:text-ink-muted/70 focus:border-gold focus:shadow-[0_0_0_3px_rgba(168,116,32,0.13)]";
-const labelClass = "mb-2 block text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-gold-deep";
 
 // The hero copy sits on its own layer (z-10) over the background video;
 // below lg the video drops to a band under the copy (see ContactHeroVideo).
@@ -82,9 +79,8 @@ export function ContactHero() {
 }
 
 export function ContactGrid() {
-  const { reach, form } = contact;
+  const { reach } = contact;
   const { phone, email, address } = site.contact;
-  const f = form.fields;
 
   return (
     <section aria-labelledby="reach-heading" className="relative py-section">
@@ -125,50 +121,7 @@ export function ContactGrid() {
             </div>
           </div>
 
-          {/* STRUCTURE ONLY: not connected to any backend. No action, and the submit
-              button is disabled, so nothing is sent. Wire up the chosen submission
-              method, enable the button and remove form.status together. */}
-          <form
-            aria-describedby="contact-form-status"
-            className="border border-t-4 border-line border-t-gold bg-ivory px-[clamp(1.25rem,3vw,2.6rem)] py-11 shadow-[0_30px_60px_rgba(38,43,49,0.1)]"
-            {...reveal(120)}
-          >
-            <div className="grid gap-x-5 sm:grid-cols-2">
-              <div className="mb-5">
-                <label htmlFor="contact-name" className={labelClass}>{f.name.label}</label>
-                <input id="contact-name" name="name" type="text" autoComplete="name" required placeholder={f.name.placeholder} className={fieldClass} />
-              </div>
-              <div className="mb-5">
-                <label htmlFor="contact-phone" className={labelClass}>{f.phone.label}</label>
-                <input id="contact-phone" name="phone" type="tel" autoComplete="tel" required placeholder={f.phone.placeholder} className={fieldClass} />
-              </div>
-            </div>
-            <div className="grid gap-x-5 sm:grid-cols-2">
-              <div className="mb-5">
-                <label htmlFor="contact-email" className={labelClass}>{f.email.label}</label>
-                <input id="contact-email" name="email" type="email" autoComplete="email" placeholder={f.email.placeholder} className={fieldClass} />
-              </div>
-              <div className="mb-5">
-                <label htmlFor="contact-service" className={labelClass}>{f.service.label}</label>
-                <select id="contact-service" name="service" required defaultValue="" className={fieldClass}>
-                  <option value="">{f.service.placeholder}</option>
-                  {services.map((s) => (
-                    <option key={s.slug}>{s.title}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="mb-5">
-              <label htmlFor="contact-message" className={labelClass}>{f.message.label}</label>
-              <textarea id="contact-message" name="message" required placeholder={f.message.placeholder} className={`${fieldClass} min-h-[130px] resize-y`} />
-            </div>
-            <Button type="submit" disabled className="w-full">
-              {form.submitLabel}
-            </Button>
-            <p id="contact-form-status" className="mt-[0.9rem] text-center font-hand text-[1.1rem] text-gold-deep">
-              {form.status}
-            </p>
-          </form>
+          <ContactForm />
         </div>
       </Container>
     </section>
