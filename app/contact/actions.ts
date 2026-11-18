@@ -2,6 +2,7 @@
 
 import { headers } from "next/headers";
 import { parseLead, type LeadErrors, type LeadValues } from "@/lib/leads";
+import { sendLeadEmail } from "@/lib/email";
 import { alertText, sendLeadAlert } from "@/lib/whatsapp";
 
 // Contact-form submission. A public endpoint: no login exists, so the guards
@@ -44,11 +45,13 @@ export async function submitLead(_prev: LeadFormState, form: FormData): Promise<
     return { status: "failed", values: parsed.values };
   }
 
+  // Alert by email and WhatsApp together; the lead counts as delivered if
+  // either channel gets through (a channel without credentials is a dry run).
   const { lead } = parsed;
-  const result = await sendLeadAlert(lead);
-  if (!result.ok) {
+  const [email, whatsapp] = await Promise.all([sendLeadEmail(lead), sendLeadAlert(lead)]);
+  if (!email.ok && !whatsapp.ok) {
     // Keep the enquiry in the server log so it can be followed up by hand.
-    console.error(`[lead] NOT DELIVERED (${result.error}):\n${alertText(lead)}`);
+    console.error(`[lead] NOT DELIVERED (email: ${email.error}, whatsapp: ${whatsapp.error}):\n${alertText(lead)}`);
     return { status: "failed", values: parsed.values };
   }
 

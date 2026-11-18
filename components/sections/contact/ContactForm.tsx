@@ -10,7 +10,7 @@ import { site } from "@/content/site";
 import type { LeadField } from "@/lib/leads";
 
 // The contact form, submitted to the submitLead Server Action, which validates
-// it and sends a WhatsApp alert to the team (see lib/whatsapp.ts). Shows
+// it and alerts the team by email and WhatsApp (lib/email.ts, lib/whatsapp.ts). Shows
 // per-field errors, a pending state, and a thank-you screen with a prefilled
 // "continue on WhatsApp" link.
 
